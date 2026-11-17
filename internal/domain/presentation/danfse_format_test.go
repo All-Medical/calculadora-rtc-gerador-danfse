@@ -191,11 +191,12 @@ func TestMapearTipoAmbiente(t *testing.T) {
 }
 
 func TestMapearAmbienteGerador(t *testing.T) {
-	if got := MapearAmbienteGerador("1"); got != "Ambiente de Produção" {
-		t.Fatalf("MapearAmbienteGerador(1): esperado %q, obtido %q", "Ambiente de Produção", got)
+	// NT 008 v1.02 e leiaute TSAmbGeradorNFSe: 1 = Prefeitura, 2 = Sistema Nacional.
+	if got := MapearAmbienteGerador("1"); got != "Prefeitura" {
+		t.Fatalf("MapearAmbienteGerador(1): esperado %q, obtido %q", "Prefeitura", got)
 	}
-	if got := MapearAmbienteGerador("2"); got != "Ambiente de Homologação" {
-		t.Fatalf("MapearAmbienteGerador(2): esperado %q, obtido %q", "Ambiente de Homologação", got)
+	if got := MapearAmbienteGerador("2"); got != "Sistema Nacional da NFS-e" {
+		t.Fatalf("MapearAmbienteGerador(2): esperado %q, obtido %q", "Sistema Nacional da NFS-e", got)
 	}
 	if got := MapearAmbienteGerador("9"); got != "-" {
 		t.Fatalf("MapearAmbienteGerador(9): esperado %q, obtido %q", "-", got)

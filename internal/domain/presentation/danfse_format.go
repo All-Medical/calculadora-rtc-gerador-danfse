@@ -106,9 +106,10 @@ var (
 		2: "NFS-e de ajuste",
 	}
 
+	// TSAmbGeradorNFSe do leiaute: 1 = Prefeitura, 2 = Sistema Nacional da NFS-e.
 	mapaAmbienteGerador = map[string]string{
-		"1": "Ambiente de Produção",
-		"2": "Ambiente de Homologação",
+		"1": "Prefeitura",
+		"2": "Sistema Nacional da NFS-e",
 	}
 
 	mapaTipoAmbiente = map[int]string{

@@ -99,7 +99,7 @@ func (r *Renderer) desenharCabecalho(page *document.Page, doc presentation.Docum
 	if doc.Cabecalho.TipoAmbiente == "Homologação" {
 		r.centerText(page, labelNFSemValidadeJuridica, 5.41*cmPt, 0.95, 10.19*cmPt, 9, r.bold, redRGB)
 	}
-	r.textTop(page, fmt.Sprintf("Município: %s - %s", doc.Cabecalho.Municipio, doc.Cabecalho.UF), gridX4(), 0.45, 8, r.regular)
+	r.textTop(page, fmt.Sprintf("Município: %s / %s", doc.Cabecalho.Municipio, doc.Cabecalho.UF), gridX4(), 0.45, 8, r.regular)
 	r.textTop(page, "Ambiente Gerador: "+doc.Cabecalho.AmbienteGerador, gridX4(), 0.97, 6, r.regular)
 	r.textTop(page, "Tipo de Ambiente: "+doc.Cabecalho.TipoAmbiente, gridX4(), 1.22, 6, r.regular)
 	page.AddLine(bodyLeft(), topToPDFY(1.48), bodyRight(), topToPDFY(1.48), 0.5, blackRGB)

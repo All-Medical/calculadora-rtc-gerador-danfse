@@ -5,6 +5,7 @@ import (
 	"math"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -386,5 +387,51 @@ func TestRenderer_PisCofinsHidden_ExibirPisCofinsFalse(t *testing.T) {
 	}
 	if strings.Contains(text, "COFINS - Débito") {
 		t.Error("PDF contém 'COFINS - Débito' quando ExibirPisCofins=false")
+	}
+}
+
+// O cabeçalho segue a NT 008 v1.02 (item 2.4.5): "Município: CCCC / CC" e o
+// ambiente gerador pelo leiaute (ambGer 1 = Prefeitura, 2 = Sistema Nacional).
+func TestRenderer_CabecalhoMunicipioEAmbienteGerador(t *testing.T) {
+	renderer, err := NewRenderer()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range []struct{ ambGer, esperado string }{
+		{"1", "Ambiente Gerador: Prefeitura"},
+		{"2", "Ambiente Gerador: Sistema Nacional da NFS-e"},
+	} {
+		nota := models.NFSe{}
+		nota.InfNFSe.Id = "NFS123456"
+		nota.InfNFSe.NNFSe = "1"
+		nota.InfNFSe.AmbGer = c.ambGer
+		nota.InfNFSe.Emit.EnderNac.XMun = "Itajaí"
+		nota.InfNFSe.Emit.EnderNac.UF = "SC"
+		nota.InfNFSe.DPS.InfDPS.TpAmb = 1
+		nota.InfNFSe.DPS.InfDPS.TpEmit = 1
+		nota.InfNFSe.DPS.InfDPS.Serv.CServ.XDescServ = "Serviço de teste"
+		nota.InfNFSe.DPS.InfDPS.Serv.LocPrest.UF = "SC"
+		nota.InfNFSe.DPS.InfDPS.Serv.LocPrest.Pais = "Brasil"
+		nota.InfNFSe.DPS.InfDPS.Valores.VServPrest.VServ = 100
+		nota.InfNFSe.Valores.VLiq = 100
+		nota.ExibicaoDescServ = "Serviço de teste"
+		nota.ExibicaoLinhaTributos = "Totais aproximados dos Tributos: -"
+
+		doc := service.NovoServicoApresentacaoDanfse().Apresentar(nota)
+		pdf, err := renderer.Renderizar(context.Background(), doc)
+		if err != nil {
+			t.Fatal(err)
+		}
+		caminho := filepath.Join(t.TempDir(), "cabecalho.pdf")
+		if err := os.WriteFile(caminho, pdf, 0o600); err != nil {
+			t.Fatal(err)
+		}
+		texto := pdfText(t, caminho)
+		if !strings.Contains(texto, "Município: Itajaí / SC") {
+			t.Fatalf("ambGer=%s: cabeçalho sem \"Município: Itajaí / SC\"", c.ambGer)
+		}
+		if !strings.Contains(texto, c.esperado) {
+			t.Fatalf("ambGer=%s: esperado %q no PDF", c.ambGer, c.esperado)
+		}
 	}
 }

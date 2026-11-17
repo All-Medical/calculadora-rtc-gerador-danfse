@@ -246,8 +246,8 @@ func TestApresentadorDanfse_DadosCabecalho(t *testing.T) {
 	if documento.Cabecalho.UF != "SP" {
 		t.Fatalf("header uf: esperado %q, obteve %q", "SP", documento.Cabecalho.UF)
 	}
-	if documento.Cabecalho.AmbienteGerador != "Ambiente de Produção" {
-		t.Fatalf("header ambienteGerador: esperado %q, obteve %q", "Ambiente de Produção", documento.Cabecalho.AmbienteGerador)
+	if documento.Cabecalho.AmbienteGerador != "Prefeitura" {
+		t.Fatalf("header ambienteGerador: esperado %q, obteve %q", "Prefeitura", documento.Cabecalho.AmbienteGerador)
 	}
 	if documento.Cabecalho.TipoAmbiente != "Produção" {
 		t.Fatalf("header tipoAmbiente: esperado %q, obteve %q", "Produção", documento.Cabecalho.TipoAmbiente)
