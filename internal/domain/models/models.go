@@ -291,8 +291,9 @@ type PisCofins struct {
 }
 
 type TotTrib struct {
-	VTotTrib VTotTrib `xml:"vTotTrib"`
-	PTotTrib PTotTrib `xml:"pTotTrib"`
+	VTotTrib   VTotTrib `xml:"vTotTrib"`
+	PTotTrib   PTotTrib `xml:"pTotTrib"`
+	PTotTribSN float64  `xml:"pTotTribSN"`
 }
 
 type VTotTrib struct {

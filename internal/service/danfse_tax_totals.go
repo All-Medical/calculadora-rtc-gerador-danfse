@@ -39,5 +39,14 @@ func montarLinhaTotaisTributos(nota *models.NFSe) string {
 		)
 	}
 
+	// ME/EPP: a nota traz só o percentual do Simples Nacional. A NT 008 (nota 12) manda
+	// "-" para campo sem informação no XML, então os três níveis ficam "-" e o SN aparece à parte.
+	if percentualSN := totaisTributos.PTotTribSN; percentualSN > 0 {
+		return fmt.Sprintf(
+			"Totais aproximados dos Tributos cfe. Lei nº 12.741/2012: Federais: -; Estaduais: -; Municipais: -; Simples Nacional: %s;",
+			presentation.FormatarPercentual(percentualSN),
+		)
+	}
+
 	return "Totais aproximados dos Tributos cfe. Lei nº 12.741/2012: Federais: R$ 0,00; Estaduais: R$ 0,00; Municipais: R$ 0,00;"
 }

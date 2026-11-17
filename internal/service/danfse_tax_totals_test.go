@@ -215,3 +215,29 @@ func TestMontarLinhaTotaisTributos_MonetarioPrecendePorcentagem(t *testing.T) {
 		t.Fatalf("precedencia monetario: esperado %q, obtido %q", want, got)
 	}
 }
+
+// pTotTribSN é o percentual aproximado do Simples Nacional (ME/EPP). Sem ele,
+// a linha sairia com R$ 0,00 para tributos que a nota informa.
+func TestMontarLinhaTotaisTributos_SimplesNacional(t *testing.T) {
+	nota := &models.NFSe{
+		InfNFSe: models.InfNFSe{
+			DPS: models.DPS{
+				InfDPS: models.InfDPS{
+					Valores: models.ValoresDPS{
+						Trib: models.Trib{
+							TotTrib: models.TotTrib{
+								PTotTribSN: 6.00,
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	got := montarLinhaTotaisTributos(nota)
+	want := "Totais aproximados dos Tributos cfe. Lei nº 12.741/2012: Federais: -; Estaduais: -; Municipais: -; Simples Nacional: 6,00%;"
+	if got != want {
+		t.Fatalf("simples nacional: esperado %q, obtido %q", want, got)
+	}
+}
